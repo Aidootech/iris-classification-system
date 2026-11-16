@@ -1,0 +1,1183 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-16T20:23:10Z",
+  "model": {
+    "key": "svc_rbf",
+    "display": "Support Vector Machine",
+    "version": "1.0.0",
+    "trained_at": "2026-11-16T20:23:09Z",
+    "dataset_sha256": "622e1404d418500c335882bc3b57771a2f9f2cd8e1ce2935a4b87eaca8cb9a80",
+    "sklearn_version": "1.9.1",
+    "feature_order": [
+      "sepal_length_cm",
+      "sepal_width_cm",
+      "petal_length_cm",
+      "petal_width_cm"
+    ]
+  },
+  "dataset": {
+    "rows": 500,
+    "real": 150,
+    "synthetic": 350,
+    "train": 470,
+    "test": 30,
+    "class_counts": {
+      "setosa": {
+        "real": 50,
+        "synthetic": 117,
+        "total": 167
+      },
+      "versicolor": {
+        "real": 50,
+        "synthetic": 117,
+        "total": 167
+      },
+      "virginica": {
+        "real": 50,
+        "synthetic": 116,
+        "total": 166
+      }
+    },
+    "duplicates": 5,
+    "synthetic_method": "class_conditional_gaussian_v1",
+    "seed": 42,
+    "feature_ranges": {
+      "sepal_length_cm": {
+        "min": 4.3,
+        "max": 7.9,
+        "mean": 5.843
+      },
+      "sepal_width_cm": {
+        "min": 2.0,
+        "max": 4.4,
+        "mean": 3.057
+      },
+      "petal_length_cm": {
+        "min": 1.0,
+        "max": 6.9,
+        "mean": 3.758
+      },
+      "petal_width_cm": {
+        "min": 0.1,
+        "max": 2.5,
+        "mean": 1.199
+      }
+    },
+    "fidelity": {
+      "setosa": {
+        "sepal_length_cm": {
+          "real_mean": 4.985,
+          "synthetic_mean": 4.988,
+          "real_std": 0.308,
+          "synthetic_std": 0.295,
+          "ks_statistic": 0.0741,
+          "ks_pvalue": 0.9907
+        },
+        "sepal_width_cm": {
+          "real_mean": 3.415,
+          "synthetic_mean": 3.442,
+          "real_std": 0.399,
+          "synthetic_std": 0.389,
+          "ks_statistic": 0.0675,
+          "ks_pvalue": 0.9971
+        },
+        "petal_length_cm": {
+          "real_mean": 1.478,
+          "synthetic_mean": 1.471,
+          "real_std": 0.161,
+          "synthetic_std": 0.166,
+          "ks_statistic": 0.0558,
+          "ks_pvalue": 0.9999
+        },
+        "petal_width_cm": {
+          "real_mean": 0.255,
+          "synthetic_mean": 0.257,
+          "real_std": 0.115,
+          "synthetic_std": 0.099,
+          "ks_statistic": 0.1806,
+          "ks_pvalue": 0.2483
+        }
+      },
+      "versicolor": {
+        "sepal_length_cm": {
+          "real_mean": 5.93,
+          "synthetic_mean": 5.997,
+          "real_std": 0.477,
+          "synthetic_std": 0.454,
+          "ks_statistic": 0.1372,
+          "ks_pvalue": 0.5735
+        },
+        "sepal_width_cm": {
+          "real_mean": 2.75,
+          "synthetic_mean": 2.766,
+          "real_std": 0.309,
+          "synthetic_std": 0.319,
+          "ks_statistic": 0.0466,
+          "ks_pvalue": 1.0
+        },
+        "petal_length_cm": {
+          "real_mean": 4.252,
+          "synthetic_mean": 4.291,
+          "real_std": 0.443,
+          "synthetic_std": 0.428,
+          "ks_statistic": 0.0983,
+          "ks_pvalue": 0.9001
+        },
+        "petal_width_cm": {
+          "real_mean": 1.32,
+          "synthetic_mean": 1.322,
+          "real_std": 0.187,
+          "synthetic_std": 0.181,
+          "ks_statistic": 0.0701,
+          "ks_pvalue": 0.9954
+        }
+      },
+      "virginica": {
+        "sepal_length_cm": {
+          "real_mean": 6.61,
+          "synthetic_mean": 6.578,
+          "real_std": 0.685,
+          "synthetic_std": 0.616,
+          "ks_statistic": 0.1121,
+          "ks_pvalue": 0.8039
+        },
+        "sepal_width_cm": {
+          "real_mean": 2.98,
+          "synthetic_mean": 2.976,
+          "real_std": 0.354,
+          "synthetic_std": 0.345,
+          "ks_statistic": 0.0672,
+          "ks_pvalue": 0.9974
+        },
+        "petal_length_cm": {
+          "real_mean": 5.58,
+          "synthetic_mean": 5.573,
+          "real_std": 0.576,
+          "synthetic_std": 0.53,
+          "ks_statistic": 0.075,
+          "ks_pvalue": 0.99
+        },
+        "petal_width_cm": {
+          "real_mean": 2.04,
+          "synthetic_mean": 2.066,
+          "real_std": 0.269,
+          "synthetic_std": 0.258,
+          "ks_statistic": 0.0672,
+          "ks_pvalue": 0.9974
+        }
+      }
+    }
+  },
+  "best": {
+    "key": "svc_rbf",
+    "display": "Support Vector Machine",
+    "params": {
+      "C": 100.0,
+      "gamma": 0.01
+    },
+    "cv": {
+      "macro_f1_mean": 0.9872919802302403,
+      "macro_f1_std": 0.012350892432731086,
+      "folds": [
+        1.0,
+        1.0,
+        0.9682219419924337,
+        0.9788306451612904,
+        0.989407313997478
+      ]
+    },
+    "real_cv": {
+      "macro_f1_mean": 0.9666013071895424,
+      "macro_f1_std": 0.03119804408344911,
+      "folds": [
+        1.0,
+        0.9166666666666666,
+        0.9581699346405229,
+        0.9581699346405229,
+        1.0
+      ]
+    },
+    "test": {
+      "accuracy": 1.0,
+      "macro": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "weighted": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "per_class": {
+        "setosa": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 10
+        },
+        "versicolor": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 10
+        },
+        "virginica": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 10
+        }
+      },
+      "confusion_matrix": {
+        "labels": [
+          "setosa",
+          "versicolor",
+          "virginica"
+        ],
+        "counts": [
+          [
+            10,
+            0,
+            0
+          ],
+          [
+            0,
+            10,
+            0
+          ],
+          [
+            0,
+            0,
+            10
+          ]
+        ],
+        "normalized": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "roc_auc_ovr_macro": 1.0,
+      "n_test": 30
+    }
+  },
+  "models": [
+    {
+      "key": "svc_rbf",
+      "display": "Support Vector Machine",
+      "family": "kernel",
+      "eligible": true,
+      "note": "RBF kernel with Platt-scaled probabilities.",
+      "is_best": true,
+      "params": {
+        "C": 100.0,
+        "gamma": 0.01
+      },
+      "cv": {
+        "macro_f1_mean": 0.9872919802302403,
+        "macro_f1_std": 0.012350892432731086,
+        "folds": [
+          1.0,
+          1.0,
+          0.9682219419924337,
+          0.9788306451612904,
+          0.989407313997478
+        ],
+        "rows": 470
+      },
+      "real_cv": {
+        "macro_f1_mean": 0.9666013071895424,
+        "macro_f1_std": 0.03119804408344911,
+        "folds": [
+          1.0,
+          0.9166666666666666,
+          0.9581699346405229,
+          0.9581699346405229,
+          1.0
+        ],
+        "rows": 120
+      },
+      "test": {
+        "accuracy": 1.0,
+        "macro": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "weighted": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "per_class": {
+          "setosa": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          },
+          "versicolor": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          },
+          "virginica": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "setosa",
+            "versicolor",
+            "virginica"
+          ],
+          "counts": [
+            [
+              10,
+              0,
+              0
+            ],
+            [
+              0,
+              10,
+              0
+            ],
+            [
+              0,
+              0,
+              10
+            ]
+          ],
+          "normalized": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "roc_auc_ovr_macro": 1.0,
+        "n_test": 30
+      }
+    },
+    {
+      "key": "logistic_regression",
+      "display": "Logistic Regression",
+      "family": "linear",
+      "eligible": true,
+      "note": "",
+      "is_best": false,
+      "params": {
+        "C": 10.0
+      },
+      "cv": {
+        "macro_f1_mean": 0.9872562167644136,
+        "macro_f1_std": 0.01037222629046107,
+        "folds": [
+          1.0,
+          0.9892445138346778,
+          0.9682219419924337,
+          0.989407313997478,
+          0.989407313997478
+        ],
+        "rows": 470
+      },
+      "real_cv": {
+        "macro_f1_mean": 0.9665359477124185,
+        "macro_f1_std": 0.016732026143790834,
+        "folds": [
+          0.9581699346405229,
+          0.9581699346405229,
+          0.9581699346405229,
+          0.9581699346405229,
+          1.0
+        ],
+        "rows": 120
+      },
+      "test": {
+        "accuracy": 1.0,
+        "macro": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "weighted": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "per_class": {
+          "setosa": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          },
+          "versicolor": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          },
+          "virginica": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "setosa",
+            "versicolor",
+            "virginica"
+          ],
+          "counts": [
+            [
+              10,
+              0,
+              0
+            ],
+            [
+              0,
+              10,
+              0
+            ],
+            [
+              0,
+              0,
+              10
+            ]
+          ],
+          "normalized": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "roc_auc_ovr_macro": 1.0,
+        "n_test": 30
+      }
+    },
+    {
+      "key": "extra_trees",
+      "display": "Extra Trees",
+      "family": "ensemble",
+      "eligible": true,
+      "note": "",
+      "is_best": false,
+      "params": {
+        "max_depth": 10,
+        "max_features": "sqrt",
+        "min_samples_leaf": 1,
+        "n_estimators": 400
+      },
+      "cv": {
+        "macro_f1_mean": 0.9850925585890504,
+        "macro_f1_std": 0.014445624717013552,
+        "folds": [
+          1.0,
+          0.9892445138346778,
+          0.9574036511156186,
+          0.989407313997478,
+          0.989407313997478
+        ],
+        "rows": 470
+      },
+      "real_cv": {
+        "macro_f1_mean": 0.9582352941176471,
+        "macro_f1_std": 0.026352435413758632,
+        "folds": [
+          0.9581699346405229,
+          0.9166666666666666,
+          0.9581699346405229,
+          0.9581699346405229,
+          1.0
+        ],
+        "rows": 120
+      },
+      "test": {
+        "accuracy": 0.9666666666666667,
+        "macro": {
+          "precision": 0.9696969696969697,
+          "recall": 0.9666666666666667,
+          "f1": 0.9665831244778612
+        },
+        "weighted": {
+          "precision": 0.9696969696969696,
+          "recall": 0.9666666666666667,
+          "f1": 0.9665831244778613
+        },
+        "per_class": {
+          "setosa": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          },
+          "versicolor": {
+            "precision": 1.0,
+            "recall": 0.9,
+            "f1": 0.9473684210526315,
+            "support": 10
+          },
+          "virginica": {
+            "precision": 0.9090909090909091,
+            "recall": 1.0,
+            "f1": 0.9523809523809523,
+            "support": 10
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "setosa",
+            "versicolor",
+            "virginica"
+          ],
+          "counts": [
+            [
+              10,
+              0,
+              0
+            ],
+            [
+              0,
+              9,
+              1
+            ],
+            [
+              0,
+              0,
+              10
+            ]
+          ],
+          "normalized": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9,
+              0.1
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "roc_auc_ovr_macro": 0.9966666666666667,
+        "n_test": 30
+      }
+    },
+    {
+      "key": "knn",
+      "display": "K-Nearest Neighbours",
+      "family": "instance_based",
+      "eligible": true,
+      "note": "",
+      "is_best": false,
+      "params": {
+        "n_neighbors": 3,
+        "weights": "uniform"
+      },
+      "cv": {
+        "macro_f1_mean": 0.9807799460393525,
+        "macro_f1_std": 0.028173424389096806,
+        "folds": [
+          1.0,
+          0.9892445138346778,
+          0.9252479023646072,
+          0.989407313997478,
+          1.0
+        ],
+        "rows": 470
+      },
+      "real_cv": {
+        "macro_f1_mean": 0.958169934640523,
+        "macro_f1_std": 0.04582254075860213,
+        "folds": [
+          0.9581699346405229,
+          0.8745098039215686,
+          1.0,
+          0.9581699346405229,
+          1.0
+        ],
+        "rows": 120
+      },
+      "test": {
+        "accuracy": 0.9666666666666667,
+        "macro": {
+          "precision": 0.9696969696969697,
+          "recall": 0.9666666666666667,
+          "f1": 0.9665831244778613
+        },
+        "weighted": {
+          "precision": 0.9696969696969696,
+          "recall": 0.9666666666666667,
+          "f1": 0.9665831244778613
+        },
+        "per_class": {
+          "setosa": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          },
+          "versicolor": {
+            "precision": 0.9090909090909091,
+            "recall": 1.0,
+            "f1": 0.9523809523809523,
+            "support": 10
+          },
+          "virginica": {
+            "precision": 1.0,
+            "recall": 0.9,
+            "f1": 0.9473684210526315,
+            "support": 10
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "setosa",
+            "versicolor",
+            "virginica"
+          ],
+          "counts": [
+            [
+              10,
+              0,
+              0
+            ],
+            [
+              0,
+              10,
+              0
+            ],
+            [
+              0,
+              1,
+              9
+            ]
+          ],
+          "normalized": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.1,
+              0.9
+            ]
+          ]
+        },
+        "roc_auc_ovr_macro": 0.9733333333333333,
+        "n_test": 30
+      }
+    },
+    {
+      "key": "random_forest",
+      "display": "Random Forest",
+      "family": "ensemble",
+      "eligible": true,
+      "note": "",
+      "is_best": false,
+      "params": {
+        "max_depth": null,
+        "max_features": "sqrt",
+        "min_samples_leaf": 1,
+        "n_estimators": 200
+      },
+      "cv": {
+        "macro_f1_mean": 0.976653888104179,
+        "macro_f1_std": 0.02161640915982744,
+        "folds": [
+          1.0,
+          0.9892445138346778,
+          0.9363636363636364,
+          0.9788306451612904,
+          0.9788306451612904
+        ],
+        "rows": 470
+      },
+      "real_cv": {
+        "macro_f1_mean": 0.9496700902583257,
+        "macro_f1_std": 0.03144870991526805,
+        "folds": [
+          0.9581699346405229,
+          0.9166666666666666,
+          0.9581699346405229,
+          0.9153439153439153,
+          1.0
+        ],
+        "rows": 120
+      },
+      "test": {
+        "accuracy": 0.9666666666666667,
+        "macro": {
+          "precision": 0.9696969696969697,
+          "recall": 0.9666666666666667,
+          "f1": 0.9665831244778612
+        },
+        "weighted": {
+          "precision": 0.9696969696969696,
+          "recall": 0.9666666666666667,
+          "f1": 0.9665831244778613
+        },
+        "per_class": {
+          "setosa": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          },
+          "versicolor": {
+            "precision": 1.0,
+            "recall": 0.9,
+            "f1": 0.9473684210526315,
+            "support": 10
+          },
+          "virginica": {
+            "precision": 0.9090909090909091,
+            "recall": 1.0,
+            "f1": 0.9523809523809523,
+            "support": 10
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "setosa",
+            "versicolor",
+            "virginica"
+          ],
+          "counts": [
+            [
+              10,
+              0,
+              0
+            ],
+            [
+              0,
+              9,
+              1
+            ],
+            [
+              0,
+              0,
+              10
+            ]
+          ],
+          "normalized": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9,
+              0.1
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        "roc_auc_ovr_macro": 0.9966666666666667,
+        "n_test": 30
+      }
+    },
+    {
+      "key": "decision_tree",
+      "display": "Decision Tree",
+      "family": "tree",
+      "eligible": true,
+      "note": "",
+      "is_best": false,
+      "params": {
+        "criterion": "entropy",
+        "max_depth": null,
+        "min_samples_leaf": 1
+      },
+      "cv": {
+        "macro_f1_mean": 0.9745156369620938,
+        "macro_f1_std": 0.015793724334595777,
+        "folds": [
+          0.9892445138346777,
+          0.9892445138346778,
+          0.9470365699873896,
+          0.9788306451612904,
+          0.9682219419924337
+        ],
+        "rows": 470
+      },
+      "real_cv": {
+        "macro_f1_mean": 0.9413694366635543,
+        "macro_f1_std": 0.0335188935987462,
+        "folds": [
+          0.9166666666666666,
+          0.9166666666666666,
+          0.9581699346405229,
+          0.9153439153439153,
+          1.0
+        ],
+        "rows": 120
+      },
+      "test": {
+        "accuracy": 0.9333333333333333,
+        "macro": {
+          "precision": 0.9333333333333332,
+          "recall": 0.9333333333333332,
+          "f1": 0.9333333333333332
+        },
+        "weighted": {
+          "precision": 0.9333333333333333,
+          "recall": 0.9333333333333333,
+          "f1": 0.9333333333333333
+        },
+        "per_class": {
+          "setosa": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          },
+          "versicolor": {
+            "precision": 0.9,
+            "recall": 0.9,
+            "f1": 0.9,
+            "support": 10
+          },
+          "virginica": {
+            "precision": 0.9,
+            "recall": 0.9,
+            "f1": 0.9,
+            "support": 10
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "setosa",
+            "versicolor",
+            "virginica"
+          ],
+          "counts": [
+            [
+              10,
+              0,
+              0
+            ],
+            [
+              0,
+              9,
+              1
+            ],
+            [
+              0,
+              1,
+              9
+            ]
+          ],
+          "normalized": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9,
+              0.1
+            ],
+            [
+              0.0,
+              0.1,
+              0.9
+            ]
+          ]
+        },
+        "roc_auc_ovr_macro": 0.9499999999999998,
+        "n_test": 30
+      }
+    },
+    {
+      "key": "gaussian_nb",
+      "display": "Gaussian Naive Bayes",
+      "family": "probabilistic",
+      "eligible": true,
+      "note": "",
+      "is_best": false,
+      "params": {
+        "var_smoothing": 1e-12
+      },
+      "cv": {
+        "macro_f1_mean": 0.9596744348434203,
+        "macro_f1_std": 0.03382553170843078,
+        "folds": [
+          0.9892445138346777,
+          1.0,
+          0.9043764229698962,
+          0.9576612903225806,
+          0.947089947089947
+        ],
+        "rows": 470
+      },
+      "real_cv": {
+        "macro_f1_mean": 0.9582352941176471,
+        "macro_f1_std": 0.026352435413758632,
+        "folds": [
+          0.9166666666666666,
+          0.9581699346405229,
+          0.9581699346405229,
+          0.9581699346405229,
+          1.0
+        ],
+        "rows": 120
+      },
+      "test": {
+        "accuracy": 0.9333333333333333,
+        "macro": {
+          "precision": 0.9333333333333332,
+          "recall": 0.9333333333333332,
+          "f1": 0.9333333333333332
+        },
+        "weighted": {
+          "precision": 0.9333333333333333,
+          "recall": 0.9333333333333333,
+          "f1": 0.9333333333333333
+        },
+        "per_class": {
+          "setosa": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 10
+          },
+          "versicolor": {
+            "precision": 0.9,
+            "recall": 0.9,
+            "f1": 0.9,
+            "support": 10
+          },
+          "virginica": {
+            "precision": 0.9,
+            "recall": 0.9,
+            "f1": 0.9,
+            "support": 10
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "setosa",
+            "versicolor",
+            "virginica"
+          ],
+          "counts": [
+            [
+              10,
+              0,
+              0
+            ],
+            [
+              0,
+              9,
+              1
+            ],
+            [
+              0,
+              1,
+              9
+            ]
+          ],
+          "normalized": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9,
+              0.1
+            ],
+            [
+              0.0,
+              0.1,
+              0.9
+            ]
+          ]
+        },
+        "roc_auc_ovr_macro": 0.9899999999999999,
+        "n_test": 30
+      }
+    },
+    {
+      "key": "dummy",
+      "display": "Majority-class baseline",
+      "family": "baseline",
+      "eligible": false,
+      "note": "Reference only; not eligible to be selected.",
+      "is_best": false,
+      "params": {},
+      "cv": {
+        "macro_f1_mean": 0.16533333333333333,
+        "macro_f1_std": 0.0,
+        "folds": [
+          0.16533333333333333,
+          0.16533333333333333,
+          0.16533333333333333,
+          0.16533333333333333,
+          0.16533333333333333
+        ],
+        "rows": 470
+      },
+      "real_cv": {
+        "macro_f1_mean": 0.16666666666666666,
+        "macro_f1_std": 0.0,
+        "folds": [
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666,
+          0.16666666666666666
+        ],
+        "rows": 120
+      },
+      "test": {
+        "accuracy": 0.3333333333333333,
+        "macro": {
+          "precision": 0.1111111111111111,
+          "recall": 0.3333333333333333,
+          "f1": 0.16666666666666666
+        },
+        "weighted": {
+          "precision": 0.1111111111111111,
+          "recall": 0.3333333333333333,
+          "f1": 0.16666666666666666
+        },
+        "per_class": {
+          "setosa": {
+            "precision": 0.3333333333333333,
+            "recall": 1.0,
+            "f1": 0.5,
+            "support": 10
+          },
+          "versicolor": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 10
+          },
+          "virginica": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 10
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "setosa",
+            "versicolor",
+            "virginica"
+          ],
+          "counts": [
+            [
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              0,
+              0
+            ],
+            [
+              10,
+              0,
+              0
+            ]
+          ],
+          "normalized": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "roc_auc_ovr_macro": 0.5,
+        "n_test": 30
+      }
+    }
+  ],
+  "protocol": {
+    "seed": 42,
+    "cv_folds": 5,
+    "scoring": "f1_macro",
+    "selection": "highest mean 5-fold CV macro F1 among eligible models; the holdout was not used for selection",
+    "train_rows": 470,
+    "test_rows": 30
+  }
+}
