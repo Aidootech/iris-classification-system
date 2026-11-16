@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "model_key": "logistic_regression",
+  "display_name": "Logistic Regression",
+  "family": "linear",
+  "trained_at": "2026-11-16T20:23:09Z",
+  "dataset_sha256": "622e1404d418500c335882bc3b57771a2f9f2cd8e1ce2935a4b87eaca8cb9a80",
+  "dataset_rows": 500,
+  "sklearn_version": "1.9.1",
+  "feature_order": [
+    "sepal_length_cm",
+    "sepal_width_cm",
+    "petal_length_cm",
+    "petal_width_cm"
+  ],
+  "classes": [
+    "setosa",
+    "versicolor",
+    "virginica"
+  ],
+  "preprocessing": {
+    "type": "standard_scaler",
+    "mean": [
+      5.849574468085105,
+      3.0580851063829786,
+      3.7725531914893615,
+      1.2106382978723405
+    ],
+    "scale": [
+      0.8159251567857072,
+      0.44954889113739455,
+      1.760292490305513,
+      0.7640134906220059
+    ]
+  },
+  "model": {
+    "n_classes": 3,
+    "type": "logistic_regression",
+    "coef": [
+      [
+        -1.703294014366525,
+        2.119919594225153,
+        -4.493730155146446,
+        -4.491800820000512
+      ],
+      [
+        1.5536252120692369,
+        -0.1880744779600174,
+        -1.534574293144972,
+        -2.134225269343277
+      ],
+      [
+        0.1496688022973078,
+        -1.9318451162651533,
+        6.028304448291438,
+        6.626026089343814
+      ]
+    ],
+    "intercept": [
+      -0.14144205368616508,
+      5.056987681121451,
+      -4.915545627435317
+    ]
+  }
+}

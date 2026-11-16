@@ -1,0 +1,10 @@
+[project]
+name = "iris-ml"
+version = "1.0.0"
+description = "Training, evaluation and export pipeline for the Iris classification system."
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
