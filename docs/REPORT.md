@@ -173,9 +173,10 @@ deployed model inspectable. Parity is tested in two layers:
 
 1. Python compares the JSON reference implementation with the fitted
    scikit-learn pipeline on 500 inputs and requires matching labels and
-   probabilities within `1e-9` (SVC calibration within `1e-6`).
+   probabilities within `1e-9` for every model family.
 2. The same 500 inputs and expected outputs are frozen as fixtures and replayed
-   by Vitest against the TypeScript engine.
+   by Vitest against the TypeScript engine, with a `1e-6` probability tolerance
+   for the selected SVC.
 
 The interface exposes a `POST /api/predict` endpoint with shared Zod
 validation, a result panel with probabilities, and a scatter plot that places

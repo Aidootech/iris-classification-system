@@ -164,8 +164,8 @@ metrics used by the interface.
 - The holdout split is created before synthetic data exists.
 - The deployed TypeScript engine is checked against scikit-learn on 500 frozen
   cases (all 150 real rows plus 350 random in-range vectors). Labels must match
-  exactly; probabilities must match within `1e-9` for most families and within
-  `1e-6` for the exported SVC calibration path.
+  exactly. The Python reference matches every model family within `1e-9`; the
+  TypeScript SVC fixture accepts probabilities within `1e-6`.
 - Exact Python dependency versions are pinned in `ml/requirements.txt`.
 
 ## Repository layout
