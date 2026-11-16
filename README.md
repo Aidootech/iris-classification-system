@@ -4,7 +4,9 @@ A complete Iris flower classification system: a reproducible scikit-learn
 training pipeline, a documented 500-row dataset, an evaluation report, and a
 Next.js web application that predicts the species from four measurements.
 
-**Live application:** _pending Vercel deployment_
+**Live application:** <https://iris-classification-system.vercel.app>
+
+**Source:** <https://github.com/Aidootech/iris-classification-system>
 
 ## Results
 

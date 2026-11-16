@@ -17,8 +17,8 @@ Working directory: `C:\Xampp1\htdocs\IRIS CLASSIFICATION SYSTEM`
 | R5 | Accuracy, precision, recall, F1, confusion matrix | Macro + weighted + per-class metrics, CV mean/std, count and row-normalised confusion matrices | `artifacts/metrics.json`, PNG figures, `/models` page |
 | R6 | Save the best model for the web app | Best pipeline saved as `artifacts/best_model.joblib` and exported to `lib/model/model.json` | Parity test proving identical predictions |
 | R7 | Web interface for 4 measurements | Next.js form + validated `POST /api/predict` | `/` page, `tests/api.test.ts` |
-| R8 | Pushed to GitHub | Git repo, meaningful commit history, `.gitignore`, CI workflow | Remote URL |
-| R9 | Deployed on Vercel | Next.js at repo root, zero Python runtime, no secrets required | Production URL + smoke-test log |
+| R8 | Pushed to GitHub | Git repo, meaningful commit history, `.gitignore`, CI workflow | <https://github.com/Aidootech/iris-classification-system> |
+| R9 | Deployed on Vercel | Next.js at repo root, zero Python runtime, no secrets required | <https://iris-classification-system.vercel.app> + smoke-test log |
 
 ---
 
