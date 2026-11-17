@@ -4,7 +4,12 @@ import { useId, useState, type FormEvent } from "react";
 
 import { ObservationPlot } from "@/components/observation-plot";
 import { ProbabilityBars } from "@/components/probability-bars";
-import { percent, SPECIES_LABELS, SPECIES_ORDER } from "@/lib/format";
+import {
+  percent,
+  SPECIES_COLORS,
+  SPECIES_LABELS,
+  SPECIES_ORDER,
+} from "@/lib/format";
 import type {
   FeatureKey,
   MeasurementKey,
@@ -208,7 +213,10 @@ export function Predictor({
 
   return (
     <>
-      <section className="panel" aria-labelledby="measurements-title">
+      <section
+        className="panel measurement-panel"
+        aria-labelledby="measurements-title"
+      >
         <div className="panel-head">
           <h2 className="panel-title" id="measurements-title">
             Measurements
@@ -296,95 +304,111 @@ export function Predictor({
         </form>
       </section>
 
-      <div className="stack-14">
-        <section
-          className="panel"
-          aria-labelledby="prediction-title"
-          aria-live="polite"
-          aria-busy={status === "loading"}
-        >
-          <div className="panel-head">
-            <h2 className="panel-title" id="prediction-title">
-              Prediction
-            </h2>
-            {result ? (
-              <span className="badge badge-accent">
-                <span className="badge-dot" aria-hidden="true" />
-                {percent(result.confidence)} confidence
-              </span>
-            ) : (
-              <span className="badge">3 classes</span>
-            )}
-          </div>
-          <div className="panel-body">
-            {formError ? (
-              <div className="alert" role="alert">
-                {formError}
-              </div>
-            ) : null}
+      <section
+        className="panel prediction-panel"
+        aria-labelledby="prediction-title"
+        aria-live="polite"
+        aria-busy={status === "loading"}
+      >
+        <div className="panel-head">
+          <h2 className="panel-title" id="prediction-title">
+            Prediction
+          </h2>
+          {result ? (
+            <span className="badge badge-accent">
+              <span className="badge-dot" aria-hidden="true" />
+              {percent(result.confidence)} confidence
+            </span>
+          ) : (
+            <span className="badge">3 classes</span>
+          )}
+        </div>
+        <div className="panel-body">
+          {formError ? (
+            <div className="alert" role="alert">
+              {formError}
+            </div>
+          ) : null}
 
-            {!formError && !result && status === "loading" ? (
-              <div className="result-empty">
-                <div className="eyebrow">Classifying</div>
-                <p className="result-placeholder">
-                  Evaluating the four measurements against the tuned model.
-                </p>
-              </div>
-            ) : null}
+          {!formError && !result && status === "loading" ? (
+            <div className="result-empty">
+              <div className="eyebrow">Classifying</div>
+              <p className="result-placeholder">
+                Evaluating the four measurements against the tuned model.
+              </p>
+            </div>
+          ) : null}
 
-            {!formError && !result && status === "idle" ? (
-              <div className="result-empty">
-                <div className="eyebrow">Awaiting measurement</div>
-                <p className="result-placeholder">
-                  Enter the four measurements, or choose an example, to see the
-                  most likely species and the probability for all three classes.
-                </p>
+          {!formError && !result && status === "idle" ? (
+            <div className="result-empty">
+              <div className="eyebrow">Awaiting measurement</div>
+              <p className="result-placeholder">
+                Enter the four measurements, or choose an example, to see the
+                most likely species and the probability for all three classes.
+              </p>
+              <div className="empty-classes" aria-hidden="true">
+                {SPECIES_ORDER.map((species) => (
+                  <span className="empty-class" key={species}>
+                    <span
+                      className="empty-class-dot"
+                      style={{ backgroundColor: SPECIES_COLORS[species] }}
+                    />
+                    {SPECIES_LABELS[species]}
+                  </span>
+                ))}
               </div>
-            ) : null}
+            </div>
+          ) : null}
 
-            {result ? (
-              <div className="rise">
-                <div className="species-line">
-                  <div>
-                    <div className="eyebrow">Most likely species</div>
-                    <p className="species-name" style={{ margin: "5px 0 0" }}>
-                      {result.species_display}
-                    </p>
-                  </div>
-                  <div>
-                    <div className="confidence-label">Confidence</div>
-                    <div className="confidence-value">
-                      {percent(result.confidence)}
-                    </div>
+          {result ? (
+            <div className="rise">
+              <div className="species-line">
+                <div>
+                  <div className="eyebrow">Most likely species</div>
+                  <p className="species-name" style={{ margin: "6px 0 0" }}>
+                    <span
+                      className="species-dot"
+                      style={{ backgroundColor: SPECIES_COLORS[result.species] }}
+                      aria-hidden="true"
+                    />
+                    {result.species_display}
+                  </p>
+                </div>
+                <div>
+                  <div className="confidence-label">Confidence</div>
+                  <div className="confidence-value">
+                    {percent(result.confidence)}
                   </div>
                 </div>
-
-                <ProbabilityBars
-                  probabilities={result.probabilities}
-                  order={SPECIES_ORDER}
-                />
-
-                {result.warnings.length > 0 ? (
-                  <div className="notice" role="status" style={{ marginTop: 18 }}>
-                    <span className="notice-title">Outside observed range</span>
-                    <ul>
-                      {result.warnings.map((warning) => (
-                        <li key={warning}>{warning}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-
-                <div className="meta-row">
-                  <span>Model · {result.model.display}</span>
-                  <span>scikit-learn {result.model.sklearn_version}</span>
-                  <span>v{result.model.version}</span>
-                </div>
               </div>
-            ) : null}
-          </div>
-        </section>
 
+              <ProbabilityBars
+                probabilities={result.probabilities}
+                order={SPECIES_ORDER}
+              />
+
+              {result.warnings.length > 0 ? (
+                <div className="notice" role="status" style={{ marginTop: 18 }}>
+                  <span className="notice-title">Outside observed range</span>
+                  <ul>
+                    {result.warnings.map((warning) => (
+                      <li key={warning}>{warning}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              <div className="meta-row">
+                <span>Model · {result.model.display}</span>
+                <span>scikit-learn {result.model.sklearn_version}</span>
+                <span>v{result.model.version}</span>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      <div className="workbench-wide">
         <ObservationPlot
           points={points}
           measurement={submitted}
