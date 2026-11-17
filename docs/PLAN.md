@@ -233,8 +233,14 @@ Validation: finite positive numbers, hard bounds 0.1–20 cm, advisory warning o
 ### 8.3 UX and quality bar
 
 - Responsive from 360 px to desktop; keyboard accessible; labelled inputs; `aria-live` result announcement; visible focus states.
-- Design language: restrained and instrument-like. White and light-neutral surfaces, hairline borders, near-black text, one deep green accent, muted species colours. Inter for text with IBM Plex Mono for labels and numeric data. Small corner radii, no shadows beyond a 1 px hairline, generous whitespace.
-- **Explicitly excluded:** gradients of any kind, glassmorphism, glowing orbs, oversized marketing heroes, emoji, decorative illustrations, floating cards, pill-shaped buttons, and animated gradient text.
+- Design language: botanical and editorial. The landing page pairs the supplied
+  dark greenhouse photograph with a translucent pill navigation, a glass model
+  card and a soft wave into light content sections. The workspace uses light
+  neutral surfaces, hairline borders, one deep-green accent and muted species
+  dots. Inter is used throughout, with tight display tracking. Cards have small
+  to medium radii (10–16 px) and a soft layered shadow that lifts on hover.
+- **Explicitly excluded:** emoji, neon glows, animated gradient text, heavy
+  rounded corners, and visual clutter that distracts from the evaluation.
 - Result reveals probability bars with a short opacity/position transition and the scatter point lands on the plot.
 - Empty, loading, error and out-of-range states all designed.
 - Prefers-reduced-motion respected; colour contrast checked.
@@ -268,12 +274,14 @@ IRIS CLASSIFICATION SYSTEM/
 │  └─ tests/{test_dataset,test_training,test_export_parity}.py
 ├─ artifacts/                    # metrics, figures, joblib
 ├─ app/                          # Next.js App Router
-│  ├─ layout.tsx  page.tsx  globals.css
-│  ├─ models/page.tsx  dataset/page.tsx
+│  ├─ (site)/                    # landing, /models, /dataset with public chrome
+│  ├─ (auth)/                    # /login and /signup on the shared background
+│  ├─ (dashboard)/dashboard/     # Overview, Predict, Models, Dataset, History, Profile
+│  ├─ layout.tsx  globals.css
 │  └─ api/predict/route.ts  api/metadata/route.ts
-├─ components/                   # form, result, probability bars, scatter, tables, nav
-├─ lib/                          # inference engine, zod schemas, formatting, model.json
-├─ public/                       # figures, dataset CSV, favicon
+├─ components/                   # predictor, species card, dashboard views, tables, charts
+├─ lib/                          # inference engine, zod schema, session, history, species, model.json
+├─ public/                       # figures, dataset CSV, species photos, landing background
 ├─ tests/                        # Vitest
 ├─ scripts/                      # smoke test, data sync
 ├─ package.json  tsconfig.json  next.config.ts  postcss.config.mjs
@@ -291,7 +299,7 @@ The Next.js app sits at the repository root so Vercel needs no Root Directory co
 | P1 | Repo scaffold, virtualenv, Next.js + Tailwind + TS, lint/test config, CI, `.gitignore` | `npm run dev` serves a placeholder; `pytest` and `vitest` run; first commit |
 | P2 | Data pipeline: load Iris, audit, split, synthetic generator, CSV, dataset card, EDA figure | Dataset tests green; exactly 500 rows; regenerated hash matches |
 | P3 | Training + tuning + evaluation + figures + joblib + JSON export | Leaderboard and confusion matrices produced; parity tests green |
-| P4 | Inference engine, API routes, three pages, responsive/a11y pass | `/api/predict` correct; all pages render; build passes |
+| P4 | Inference engine, API routes, public pages, demo auth, dashboard workspace, responsive/a11y pass | `/api/predict` correct; all routes render; build passes |
 | P5 | README, dataset card finalisation, model card, academic report, viva notes | Documents consistent with emitted metrics |
 | P6 | Git history, GitHub push, Vercel deploy, production smoke test | Live URL predicts correctly; CI green |
 | P7 | Handover: run/reproduce/deploy commands, demo walkthrough, known limitations | You can reproduce the pipeline unaided |

@@ -31,3 +31,20 @@ export function decimal(value: number, digits = 3): string {
 export function signedDecimal(value: number, digits = 3): string {
   return `${value >= 0 ? "" : "−"}${Math.abs(value).toFixed(digits)}`;
 }
+
+export function formatWhen(at: number): string {
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(at));
+}
+
+export function formatDate(iso: string): string {
+  return new Intl.DateTimeFormat("en", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(iso));
+}

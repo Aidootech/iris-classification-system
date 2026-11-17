@@ -4,26 +4,36 @@
 
 Open the deployed URL (or `npm run dev` locally).
 
-1. **Home page.** State the task in one sentence: four measurements in, one of
-   three Iris species out. Point out the strip: 500 rows, 150 real and 350
-   synthetic, seven algorithms, holdout accuracy.
-2. **Setosa example.** Click the `Setosa` chip, then `Classify specimen`.
-   The result should be *Iris setosa* with roughly 99% confidence. Point out
-   the probability bars for all three classes and the marker in the scatter
-   plot.
-3. **Versicolor and Virginica.** Repeat with the other two chips. The plot
-   shows why setosa is easy and the other two are closer.
-4. **Out-of-range warning.** Enter petal length `7.5` and petal width `3.0`.
+1. **Landing page.** State the task in one sentence: four measurements in, one
+   of three Iris species out. Point out the hero strip: 500 rows, seven
+   algorithms, CV macro F1, and the production model card.
+2. **Sign in.** Choose `Get started`, create an account (or use the demo
+   account), and land on the dashboard. Note that authentication is a
+   browser-only demonstration.
+3. **Overview.** Point out the workspace stats, the production model card, the
+   recent predictions and the dataset balance.
+4. **Setosa example.** Sidebar → Predict, click the `Setosa` chip, then
+   `Classify specimen`. The species card shows the flower photograph, the
+   confidence tier, the measurements and the model; below it are the probability
+   bars for all three classes.
+5. **Versicolor and Virginica.** Repeat with the other two chips. The scatter
+   marker shows why setosa is easy and the other two are closer.
+6. **History.** Sidebar → History. The three predictions are listed newest
+   first with confidence, measurements and model version. Point out the CSV
+   export and the clear action.
+7. **Out-of-range warning.** Enter petal length `7.5` and petal width `3.0`.
    The prediction still appears, but a warning states that the values are
    outside the observed range. This demonstrates defensible input handling.
-5. **Models page.** Show the leaderboard, the selected SVC card, the confusion
-   matrix and the per-class table. Say that selection used cross-validated
-   macro F1, not the holdout.
-6. **Dataset page.** Show the composition bar, the five generation steps, the
-   KS fidelity table and the CSV download. Emphasise that synthetic rows were
-   generated from the 120 real training rows only.
-7. **Close.** Mention the parity suite: the TypeScript engine reproduces
-   scikit-learn on 500 frozen cases, so deployment is not a different model.
+8. **Models page.** Sidebar → Models (or the public `/models` report) to show
+   the leaderboard, the selected SVC card, the confusion matrix and the
+   per-class table. Say that selection used cross-validated macro F1, not the
+   holdout.
+9. **Dataset page.** Sidebar → Dataset (or `/dataset`) to show the composition
+   bar, the generation method, the feature ranges and the CSV download.
+   Emphasise that synthetic rows were generated from the 120 real training rows
+   only.
+10. **Close.** Mention the parity suite: the TypeScript engine reproduces
+    scikit-learn on 500 frozen cases, so deployment is not a different model.
 
 If asked to prove the API directly:
 
@@ -219,8 +229,12 @@ overstate confidence.
 **How is the app validated and secured?**
 
 Zod validates the JSON body on the server. The API returns 400 with field
-issues for invalid input. There is no database, authentication or user data, so
-the attack surface is small. The model is read-only.
+issues for invalid input. The UI validates the four measurements before sending
+them. Sign-in, sign-up and prediction history are a browser-only demonstration:
+a session is kept in `localStorage`, no password is stored or transmitted, and
+there is no server-side account database. Clearing site data removes the local
+account and history. The model is read-only and no measurement is sent to a
+third party.
 
 **What would you change with more time?**
 
@@ -250,6 +264,10 @@ over all 500 rows as an explicitly optimistic baseline.
 | Inference engine | `lib/model/inference.ts` |
 | Validation | `lib/schema.ts` |
 | API | `app/api/predict/route.ts` |
+| Dashboard shell | `components/dashboard-shell.tsx` |
+| Species result card | `components/species-card.tsx` |
+| Session storage | `lib/session.ts` |
+| Prediction history | `lib/history.ts` |
 | Synthetic generator | `ml/src/iris_ml/synthetic.py` |
 | Split and validation | `ml/src/iris_ml/data.py` |
 | Tuning | `ml/src/iris_ml/train.py` |

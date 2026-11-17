@@ -70,6 +70,28 @@ checks and limitations.
   parity cases.
 - **Deployment:** Vercel. No Python runtime is required in production.
 
+## Interface
+
+The application has three areas:
+
+- **Public site** — `/` is the landing page, `/models` is the full evaluation
+  report, and `/dataset` documents the 500-row dataset.
+- **Authentication** — `/login` and `/signup` sit on the botanical background.
+  The flow is a demo: no account is sent anywhere, and the session is kept in
+  `localStorage`. Signing in or creating an account redirects to the dashboard.
+- **Workspace** — `/dashboard` has six routes, one per sidebar item: Overview,
+  Predict, Models, Dataset, History and Profile.
+
+The Predict page accepts the four measurements and returns a calibrated
+probability for each species. When the result is rendered, a species card shows
+the matching flower photograph, the confidence tier, the measurements and the
+model that produced the answer. Every successful prediction is stored locally,
+newest first, and the History page can export the log as CSV or clear it. A
+client-side guard sends signed-out visitors back to `/login`.
+
+Authentication and prediction history are demonstration features stored in the
+browser. There is no password store, server session or third-party analytics.
+
 ## Quick start
 
 Requirements: Node.js 20.9 or newer. Python is only needed to rebuild the
@@ -173,13 +195,20 @@ metrics used by the interface.
 ## Repository layout
 
 ```text
-app/                    Next.js pages and API route handlers
-components/             Predictor, tables, charts, navigation
+app/(site)/             Public landing page, model report and dataset pages
+app/(auth)/             Sign-in and sign-up routes on the shared background
+app/(dashboard)/        Workspace routes with the sidebar shell and auth guard
+app/api/                Prediction and metadata route handlers
+components/             Predictor, species card, dashboard views, tables, charts
 lib/model/              Exported model spec, summary, TypeScript engine
+lib/session.ts          Demo session storage in localStorage
+lib/history.ts          Prediction history storage and CSV export
+lib/species.ts          Species descriptions, images and confidence tiers
 lib/schema.ts           Shared Zod request schema
 data/iris_500.csv       Committed 500-row dataset
 ml/                     Python pipeline, source and pytest suite
 artifacts/              Metrics, leaderboard CSV, joblib, figures, model specs
+public/species/         Species photographs used by the result card
 public/                 Downloadable CSV and report figures
 docs/                   Plan, dataset card, model card, report, viva notes
 tests/                  Vitest schema, API and parity tests
@@ -212,6 +241,9 @@ npm run smoke -- https://your-project.vercel.app
   custom implementation. The parity suite is the guard against drift.
 - The model is for education and demonstration, not botanical or agricultural
   decision-making.
+- Sign-in, sign-up and prediction history are demonstration features stored in
+  the browser's `localStorage`. Clearing site data removes the account and the
+  log; nothing is synchronised between devices.
 
 ## Documentation
 

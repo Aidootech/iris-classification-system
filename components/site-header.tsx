@@ -1,37 +1,78 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { Nav } from "./nav";
+import { ArrowRightIcon, IrisMark } from "@/components/icons";
+import { initials, readSession, subscribeSession, type Session } from "@/lib/session";
 
-function Mark() {
-  return (
-    <svg
-      className="wordmark-mark"
-      viewBox="0 0 20 20"
-      width="19"
-      height="19"
-      aria-hidden="true"
-    >
-      <g fill="currentColor">
-        <ellipse cx="10" cy="5.7" rx="2.6" ry="4" />
-        <ellipse cx="10" cy="14.3" rx="2.6" ry="4" />
-        <ellipse cx="5.7" cy="10" rx="4" ry="2.6" />
-        <ellipse cx="14.3" cy="10" rx="4" ry="2.6" />
-      </g>
-      <circle cx="10" cy="10" r="1.25" fill="var(--color-clay)" />
-    </svg>
-  );
-}
+const LINKS = [
+  { href: "/#method", label: "Method" },
+  { href: "/models", label: "Models" },
+  { href: "/dataset", label: "Dataset" },
+];
 
 export function SiteHeader() {
+  const pathname = usePathname();
+  const dark = pathname === "/";
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    const update = () => setSession(readSession());
+    update();
+    return subscribeSession(update);
+  }, []);
+
   return (
-    <header className="site-header">
+    <header className={`site-header${dark ? " site-header-dark" : ""}`}>
       <div className="shell header-inner">
         <Link href="/" className="wordmark" aria-label="Iris Classifier home">
-          <Mark />
-          Iris Classifier
-          <span className="wordmark-version">v1.0</span>
+          <span className="wordmark-mark">
+            <IrisMark size={21} />
+          </span>
+          <span className="wordmark-text">
+            Iris <span>Classifier</span>
+          </span>
         </Link>
-        <Nav />
+
+        <nav className="main-nav" aria-label="Primary">
+          {LINKS.map((link) => {
+            const active =
+              link.href !== "/#method" && pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="main-nav-link"
+                data-active={active ? "true" : undefined}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="header-actions">
+          {session ? (
+            <Link href="/dashboard" className="btn btn-primary btn-sm">
+              <span className="header-avatar" aria-hidden="true">
+                {initials(session.name)}
+              </span>
+              Dashboard
+              <ArrowRightIcon size={15} />
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="header-signin">
+                Sign in
+              </Link>
+              <Link href="/signup" className="btn btn-primary btn-sm">
+                Get started
+              </Link>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );

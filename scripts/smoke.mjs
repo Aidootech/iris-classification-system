@@ -121,6 +121,14 @@ console.log(`Smoke testing ${base}\n`);
 await checkPage("/", "Measure the");
 await checkPage("/models", "Seven algorithms");
 await checkPage("/dataset", "150 real, 350 synthetic");
+await checkPage("/login", "Welcome back");
+await checkPage("/signup", "Create your account");
+await checkPage("/dashboard", "Opening workspace");
+await checkPage("/dashboard/predict", "Opening workspace");
+await checkPage("/dashboard/models", "Opening workspace");
+await checkPage("/dashboard/dataset", "Opening workspace");
+await checkPage("/dashboard/history", "Opening workspace");
+await checkPage("/dashboard/profile", "Opening workspace");
 await checkMetadata();
 await predict(
   "setosa example",

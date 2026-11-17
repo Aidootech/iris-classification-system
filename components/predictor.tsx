@@ -4,6 +4,7 @@ import { useId, useState, type FormEvent } from "react";
 
 import { ObservationPlot } from "@/components/observation-plot";
 import { ProbabilityBars } from "@/components/probability-bars";
+import { SpeciesCard } from "@/components/species-card";
 import {
   percent,
   SPECIES_COLORS,
@@ -26,6 +27,12 @@ import {
 type Values = Record<MeasurementKey, string>;
 type FieldErrors = Partial<Record<MeasurementKey, string>>;
 type Status = "idle" | "loading";
+type NumericMeasurements = {
+  sepal_length: number;
+  sepal_width: number;
+  petal_length: number;
+  petal_width: number;
+};
 
 const EMPTY: Values = {
   sepal_length: "",
@@ -83,10 +90,17 @@ export function Predictor({
   modelName,
   ranges,
   points,
+  showPlot = true,
+  onPrediction,
 }: {
   modelName: string;
   ranges: Record<FeatureKey, { min: number; max: number }>;
   points: [number, number, number, number][];
+  showPlot?: boolean;
+  onPrediction?: (payload: {
+    result: PredictionResponse;
+    measurements: NumericMeasurements;
+  }) => void;
 }) {
   const baseId = useId();
   const [values, setValues] = useState<Values>(EMPTY);
@@ -94,14 +108,12 @@ export function Predictor({
   const [formError, setFormError] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [result, setResult] = useState<PredictionResponse | null>(null);
-  const [submitted, setSubmitted] = useState<{
-    petalLength: number;
-    petalWidth: number;
-  } | null>(null);
+  const [measurements, setMeasurements] =
+    useState<NumericMeasurements | null>(null);
 
   function clearOutput() {
     setResult(null);
-    setSubmitted(null);
+    setMeasurements(null);
     setFormError(null);
   }
 
@@ -115,7 +127,7 @@ export function Predictor({
     });
     if (result) {
       setResult(null);
-      setSubmitted(null);
+      setMeasurements(null);
     }
     setFormError(null);
   }
@@ -166,14 +178,14 @@ export function Predictor({
       }
       setErrors(next);
       setResult(null);
-      setSubmitted(null);
+      setMeasurements(null);
       setFormError("Check the four measurements before classifying.");
       return;
     }
 
     setErrors({});
     setResult(null);
-    setSubmitted(null);
+    setMeasurements(null);
     setStatus("loading");
 
     try {
@@ -182,24 +194,27 @@ export function Predictor({
         headers: { "content-type": "application/json" },
         body: JSON.stringify(parsed.data),
       });
-      const payload = await response.json();
+      const payload: unknown = await response.json();
 
       if (!response.ok) {
-        if (payload.issues) applyIssues(payload.issues);
+        const error = payload as {
+          issues?: { field: string; message: string }[];
+          message?: string;
+        };
+        if (error.issues) applyIssues(error.issues);
         setFormError(
-          payload.message ??
+          error.message ??
             "The classifier could not process these measurements.",
         );
         setStatus("idle");
         return;
       }
 
-      setResult(payload as PredictionResponse);
-      setSubmitted({
-        petalLength: parsed.data.petal_length,
-        petalWidth: parsed.data.petal_width,
-      });
+      const prediction = payload as PredictionResponse;
+      setResult(prediction);
+      setMeasurements(parsed.data);
       setStatus("idle");
+      onPrediction?.({ result: prediction, measurements: parsed.data });
     } catch {
       setFormError(
         "The prediction service is unreachable. Check the connection and try again.",
@@ -360,32 +375,27 @@ export function Predictor({
             </div>
           ) : null}
 
-          {result ? (
+          {result && measurements ? (
             <div className="rise">
-              <div className="species-line">
-                <div>
-                  <div className="eyebrow">Most likely species</div>
-                  <p className="species-name" style={{ margin: "6px 0 0" }}>
-                    <span
-                      className="species-dot"
-                      style={{ backgroundColor: SPECIES_COLORS[result.species] }}
-                      aria-hidden="true"
-                    />
-                    {result.species_display}
-                  </p>
-                </div>
-                <div>
-                  <div className="confidence-label">Confidence</div>
-                  <div className="confidence-value">
-                    {percent(result.confidence)}
-                  </div>
-                </div>
-              </div>
-
-              <ProbabilityBars
-                probabilities={result.probabilities}
-                order={SPECIES_ORDER}
+              <SpeciesCard
+                species={result.species}
+                confidence={result.confidence}
+                measurements={measurements}
+                model={result.model.display}
               />
+
+              <div className="result-probabilities">
+                <div className="result-probabilities-head">
+                  <span className="eyebrow">Probability by species</span>
+                  <span className="result-probabilities-note">
+                    calibrated across three classes
+                  </span>
+                </div>
+                <ProbabilityBars
+                  probabilities={result.probabilities}
+                  order={SPECIES_ORDER}
+                />
+              </div>
 
               {result.warnings.length > 0 ? (
                 <div className="notice" role="status" style={{ marginTop: 18 }}>
@@ -408,13 +418,22 @@ export function Predictor({
         </div>
       </section>
 
-      <div className="workbench-wide">
-        <ObservationPlot
-          points={points}
-          measurement={submitted}
-          predicted={predicted}
-        />
-      </div>
+      {showPlot ? (
+        <div className="workbench-wide">
+          <ObservationPlot
+            points={points}
+            measurement={
+              measurements
+                ? {
+                    petalLength: measurements.petal_length,
+                    petalWidth: measurements.petal_width,
+                  }
+                : null
+            }
+            predicted={predicted}
+          />
+        </div>
+      ) : null}
     </>
   );
 }
