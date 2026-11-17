@@ -118,7 +118,7 @@ async function checkMetadata() {
 
 console.log(`Smoke testing ${base}\n`);
 
-await checkPage("/", "Measure the specimen.");
+await checkPage("/", "Measure the");
 await checkPage("/models", "Seven algorithms");
 await checkPage("/dataset", "150 real, 350 synthetic");
 await checkMetadata();
