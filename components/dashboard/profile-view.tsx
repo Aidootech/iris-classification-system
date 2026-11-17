@@ -19,7 +19,7 @@ import {
   historyToCsv,
   type HistoryEntry,
 } from "@/lib/history";
-import { clearSession, initials, writeSession } from "@/lib/session";
+import { clearSession, initials, writeAccount, writeSession } from "@/lib/session";
 import { useHistory } from "@/lib/use-history";
 import { useSession } from "@/lib/use-session";
 
@@ -65,7 +65,9 @@ export function ProfileView() {
   function saveName(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!session || name.trim().length < 2) return;
-    writeSession({ ...session, name: name.trim() });
+    const nextName = name.trim();
+    writeSession({ ...session, name: nextName });
+    writeAccount({ name: nextName, email: session.email });
     setSaved(true);
   }
 
