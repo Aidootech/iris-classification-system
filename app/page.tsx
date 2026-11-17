@@ -17,6 +17,7 @@ export default function HomePage() {
           alt=""
           fill
           priority
+          unoptimized
           sizes="100vw"
         />
         <div className="hero-photo-wash" aria-hidden="true" />
