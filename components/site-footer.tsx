@@ -8,8 +8,7 @@ export function SiteFooter() {
       <div className="shell footer-top">
         <div className="footer-brand">
           <span className="footer-wordmark">
-            <BrandMark size={28} />
-            Iris Classifier
+            <BrandMark height={40} tone="light" />
           </span>
           <p>
             Seven classifiers compared on 500 documented observations, with a

@@ -430,33 +430,7 @@ img {
 .wordmark {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
   white-space: nowrap;
-}
-
-.wordmark-mark {
-  display: inline-flex;
-  color: var(--color-accent);
-}
-
-.wordmark-text span {
-  color: var(--color-muted);
-  font-weight: 500;
-}
-
-.site-header-dark .wordmark {
-  color: #ffffff;
-}
-
-.site-header-dark .wordmark-mark {
-  color: #b9e6c6;
-}
-
-.site-header-dark .wordmark-text span {
-  color: rgba(255, 255, 255, 0.66);
 }
 
 .main-nav {
@@ -1004,12 +978,7 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  margin-bottom: 18px;
-  border-radius: 14px;
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
+  margin-bottom: 14px;
 }
 
 .landing-cta h2 {
@@ -1118,22 +1087,6 @@ img {
 .auth-brand {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--color-accent);
-}
-
-.auth-brand-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
 }
 
 .auth-card > .auth-brand {
@@ -1717,11 +1670,6 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -3948,15 +3896,6 @@ img {
 .footer-wordmark {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-size: 14.5px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-}
-
-.footer-wordmark svg {
-  color: #a9d9b8;
 }
 
 .footer-brand p {
@@ -5317,8 +5256,10 @@ img {
   --color-accent-strong: #3b45b3;
   --color-accent-soft: #eef0fe;
 
-  min-height: 100dvh;
+  height: 100dvh;
+  min-height: 0;
   padding: 24px;
+  overflow: hidden;
   background:
     radial-gradient(80% 70% at 6% 0%, #f3f5fd 0%, transparent 58%),
     linear-gradient(155deg, #e9ecf7 0%, #dfe4f1 48%, #d6dcec 100%);
@@ -5332,7 +5273,8 @@ img {
   align-items: stretch;
   width: 100%;
   max-width: 1440px;
-  min-height: calc(100dvh - 48px);
+  height: calc(100dvh - 48px);
+  min-height: 0;
   margin-inline: auto;
   overflow: clip;
   border: 1px solid rgba(255, 255, 255, 0.9);
@@ -5349,7 +5291,10 @@ img {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
   padding: 20px 14px 14px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   border-right: 1px solid var(--color-line);
   background: var(--color-paper);
 }
@@ -5444,6 +5389,7 @@ img {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
 }
 
 /* Top bar */
@@ -5451,6 +5397,7 @@ img {
 .ws-bar {
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
   gap: 18px;
   height: 70px;
   padding: 0 22px;
@@ -5461,26 +5408,7 @@ img {
 .ws-brand {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
   flex: 0 0 auto;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -0.022em;
-  color: var(--color-ink);
-}
-
-.ws-brand-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
-}
-
-.ws-brand-text span {
-  color: var(--color-muted);
-  font-weight: 500;
 }
 
 .ws-nav {
@@ -5710,8 +5638,39 @@ img {
 /* Main workspace area */
 
 .ws-main {
+  position: relative;
   flex: 1 1 auto;
+  min-height: 0;
   padding: 28px 30px 38px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #c6ccdd transparent;
+}
+
+.ws-main::-webkit-scrollbar,
+.ws-side::-webkit-scrollbar {
+  width: 10px;
+}
+
+.ws-main::-webkit-scrollbar-track,
+.ws-side::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ws-main::-webkit-scrollbar-thumb,
+.ws-side::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: #c6ccdd;
+  background-clip: content-box;
+}
+
+.ws-main::-webkit-scrollbar-thumb:hover,
+.ws-side::-webkit-scrollbar-thumb:hover {
+  background: #aeb6cc;
+  background-clip: content-box;
 }
 
 .ws-content {
@@ -5780,10 +5739,6 @@ img {
 .ws-drawer.is-open {
   transform: none;
   visibility: visible;
-}
-
-.ws-drawer .ws-brand-text {
-  display: inline;
 }
 
 .ws-drawer-head {
@@ -5953,7 +5908,8 @@ img {
   }
 
   .ws-shell {
-    min-height: calc(100dvh - 20px);
+    height: calc(100dvh - 20px);
+    min-height: 0;
     border-radius: 18px;
   }
 
@@ -5963,22 +5919,8 @@ img {
     padding: 0 14px;
   }
 
-  .ws-brand-text {
-    display: none;
-  }
-
   .ws-search {
     width: 158px;
-  }
-
-  .ws-new span {
-    display: none;
-  }
-
-  .ws-new {
-    width: 36px;
-    justify-content: center;
-    padding: 0;
   }
 
   .ws-main {
@@ -6837,24 +6779,7 @@ img {
 .brand-mark {
   display: block;
   flex: 0 0 auto;
-  border-radius: 50%;
   object-fit: contain;
-}
-
-.wordmark-mark,
-.auth-brand-mark,
-.cta-mark,
-.dash-loading-mark {
-  background: transparent;
-  color: inherit;
-}
-
-.wordmark-mark {
-  line-height: 0;
-}
-
-.footer-wordmark img {
-  border-radius: 50%;
 }
 
 /* ------------------------------------------------------------------ */

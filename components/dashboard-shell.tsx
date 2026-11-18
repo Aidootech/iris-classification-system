@@ -138,7 +138,7 @@ export function DashboardShell({
     return (
       <div className="dash-loading">
         <span className="dash-loading-mark">
-          <BrandMark size={34} />
+          <BrandMark height={48} />
         </span>
         <span>Opening workspace…</span>
       </div>
@@ -166,12 +166,7 @@ export function DashboardShell({
       <div className="ws-shell">
         <aside className="ws-side" aria-label="Dashboard">
           <Link href="/" className="ws-brand" aria-label="Iris Classifier home">
-            <span className="ws-brand-mark">
-              <BrandMark size={40} />
-            </span>
-            <span className="ws-brand-text">
-              Iris <span>Classifier</span>
-            </span>
+            <BrandMark height={46} priority />
           </Link>
 
           <p className="ws-side-label">Workspace</p>
@@ -331,12 +326,7 @@ export function DashboardShell({
       >
         <div className="ws-drawer-head">
           <span className="ws-brand">
-            <span className="ws-brand-mark">
-              <BrandMark size={30} />
-            </span>
-            <span className="ws-brand-text">
-              Iris <span>Classifier</span>
-            </span>
+            <BrandMark height={40} />
           </span>
           <button
             type="button"

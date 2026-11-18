@@ -263,7 +263,7 @@ export default function HomePage() {
           <Reveal>
             <div className="landing-cta">
               <span className="cta-mark">
-                <BrandMark size={40} />
+                <BrandMark height={50} />
               </span>
               <p className="eyebrow">Your workspace</p>
               <h2>Your specimen, classified in seconds.</h2>

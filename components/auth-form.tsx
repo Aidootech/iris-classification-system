@@ -95,10 +95,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
   return (
     <div className="auth-card">
       <Link href="/" className="auth-brand" aria-label="Iris Classifier home">
-        <span className="auth-brand-mark">
-          <BrandMark size={32} />
-        </span>
-        Iris
+        <BrandMark height={42} priority />
       </Link>
 
       <h1>{signup ? "Create your account" : "Welcome back"}</h1>

@@ -49,12 +49,11 @@ export function SiteHeader() {
     >
       <div className="shell header-inner">
         <Link href="/" className="wordmark" aria-label="Iris Classifier home">
-          <span className="wordmark-mark">
-            <BrandMark size={30} />
-          </span>
-          <span className="wordmark-text">
-            Iris <span>Classifier</span>
-          </span>
+          <BrandMark
+            height={38}
+            tone={dark ? "light" : "default"}
+            priority
+          />
         </Link>
 
         <nav className="main-nav" aria-label="Primary">
