@@ -16,6 +16,7 @@ export default function DashboardOverviewPage() {
       testRows={dataset.test}
       realRows={dataset.real}
       syntheticRows={dataset.synthetic}
+      classCounts={dataset.class_counts}
     />
   );
 }

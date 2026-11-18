@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
-  ArrowRightIcon,
+  ChevronDownIcon,
   CloseIcon,
   DatasetIcon,
   HistoryIcon,
@@ -14,8 +14,10 @@ import {
   MenuIcon,
   ModelsIcon,
   OverviewIcon,
+  PlusIcon,
   PredictIcon,
   ProfileIcon,
+  SearchIcon,
 } from "@/components/icons";
 import {
   clearSession,
@@ -25,16 +27,44 @@ import {
   type Session,
 } from "@/lib/session";
 
-const WORKSPACE_NAV = [
-  { href: "/dashboard", label: "Overview", icon: OverviewIcon, exact: true },
-  { href: "/dashboard/predict", label: "Predict", icon: PredictIcon },
-  { href: "/dashboard/models", label: "Models", icon: ModelsIcon },
-  { href: "/dashboard/dataset", label: "Dataset", icon: DatasetIcon },
-];
-
-const ACCOUNT_NAV = [
-  { href: "/dashboard/history", label: "History", icon: HistoryIcon },
-  { href: "/dashboard/profile", label: "Profile", icon: ProfileIcon },
+const NAV = [
+  {
+    href: "/dashboard",
+    label: "Overview",
+    description: "Workspace summary and recent activity",
+    icon: OverviewIcon,
+    exact: true,
+  },
+  {
+    href: "/dashboard/predict",
+    label: "Predict",
+    description: "Classify a specimen from four measurements",
+    icon: PredictIcon,
+  },
+  {
+    href: "/dashboard/models",
+    label: "Models",
+    description: "Leaderboard, holdout metrics and confusion matrix",
+    icon: ModelsIcon,
+  },
+  {
+    href: "/dashboard/dataset",
+    label: "Dataset",
+    description: "Composition, splits and feature ranges",
+    icon: DatasetIcon,
+  },
+  {
+    href: "/dashboard/history",
+    label: "History",
+    description: "Stored predictions and CSV export",
+    icon: HistoryIcon,
+  },
+  {
+    href: "/dashboard/profile",
+    label: "Profile",
+    description: "Account details and local data controls",
+    icon: ProfileIcon,
+  },
 ];
 
 const TITLES: Record<string, string> = {
@@ -46,12 +76,8 @@ const TITLES: Record<string, string> = {
   "/dashboard/profile": "Profile",
 };
 
-function pageTitle(pathname: string): string {
-  if (TITLES[pathname]) return TITLES[pathname];
-  const match = Object.keys(TITLES)
-    .filter((key) => key !== "/dashboard")
-    .find((key) => pathname.startsWith(key));
-  return match ? TITLES[match] : "Workspace";
+function isActive(pathname: string, href: string, exact?: boolean) {
+  return exact ? pathname === href : pathname.startsWith(href);
 }
 
 export function DashboardShell({
@@ -61,8 +87,11 @@ export function DashboardShell({
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [today, setToday] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const searchWrap = useRef<HTMLDivElement>(null);
+  const searchInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const sync = () => {
@@ -72,19 +101,43 @@ export function DashboardShell({
     };
     sync();
     setReady(true);
-    setToday(
-      new Intl.DateTimeFormat("en", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-      }).format(new Date()),
-    );
     return subscribeSession(sync);
   }, [router]);
 
   useEffect(() => {
-    setOpen(false);
+    setMenuOpen(false);
+    setSearchOpen(false);
+    setQuery("");
   }, [pathname]);
+
+  useEffect(() => {
+    function onPointerDown(event: MouseEvent) {
+      if (
+        searchWrap.current &&
+        !searchWrap.current.contains(event.target as Node)
+      ) {
+        setSearchOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onPointerDown);
+    return () => document.removeEventListener("mousedown", onPointerDown);
+  }, []);
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        searchInput.current?.focus();
+        setSearchOpen(true);
+      }
+      if (event.key === "Escape") {
+        setSearchOpen(false);
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   function signOut() {
     clearSession();
@@ -102,125 +155,233 @@ export function DashboardShell({
     );
   }
 
-  const title = pageTitle(pathname);
   const avatar = initials(session.name);
+  const normalized = query.trim().toLowerCase();
+  const results = normalized
+    ? NAV.filter((item) =>
+        `${item.label} ${item.description}`.toLowerCase().includes(normalized),
+      )
+    : NAV;
 
-  const renderItem = (item: (typeof WORKSPACE_NAV)[number]) => {
-    const active = item.exact
-      ? pathname === item.href
-      : pathname.startsWith(item.href);
-    const Icon = item.icon;
-    return (
-      <Link
-        key={item.href}
-        href={item.href}
-        className="dash-nav-link"
-        data-active={active ? "true" : undefined}
-        aria-current={active ? "page" : undefined}
-      >
-        <Icon size={18} />
-        <span>{item.label}</span>
-        {active ? <span className="dash-nav-active-dot" aria-hidden="true" /> : null}
-      </Link>
-    );
-  };
+  function submitSearch() {
+    if (results.length > 0) {
+      router.push(results[0].href);
+      setQuery("");
+      setSearchOpen(false);
+    }
+  }
 
   return (
-    <div className="dash">
-      <aside className={`dash-sidebar${open ? " is-open" : ""}`}>
-        <div className="dash-sidebar-head">
-          <Link href="/" className="dash-brand" aria-label="Iris Classifier home">
-            <span className="dash-brand-mark">
-              <IrisMark size={20} />
+    <div className="ws">
+      <div className="ws-shell">
+        <header className="ws-bar">
+          <Link href="/" className="ws-brand" aria-label="Iris Classifier home">
+            <span className="ws-brand-mark">
+              <IrisMark size={19} />
             </span>
-            <span className="dash-brand-text">
+            <span className="ws-brand-text">
               Iris <span>Classifier</span>
             </span>
           </Link>
+
+          <nav className="ws-nav" aria-label="Dashboard">
+            {NAV.map((item) => {
+              const active = isActive(pathname, item.href, item.exact);
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="ws-nav-link"
+                  data-active={active ? "true" : undefined}
+                  aria-current={active ? "page" : undefined}
+                >
+                  <Icon size={15} />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="ws-tools">
+            <div
+              className="ws-search"
+              ref={searchWrap}
+              data-open={searchOpen ? "true" : undefined}
+            >
+              <SearchIcon size={15} className="ws-search-icon" />
+              <input
+                ref={searchInput}
+                type="search"
+                className="ws-search-input"
+                value={query}
+                placeholder="Search workspace"
+                aria-label="Search workspace"
+                aria-expanded={searchOpen}
+                aria-controls="ws-search-results"
+                autoComplete="off"
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setSearchOpen(true);
+                }}
+                onFocus={() => setSearchOpen(true)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    submitSearch();
+                  }
+                  if (event.key === "Escape") {
+                    setQuery("");
+                    setSearchOpen(false);
+                    event.currentTarget.blur();
+                  }
+                }}
+              />
+              <kbd className="ws-kbd" aria-hidden="true">
+                ⌘K
+              </kbd>
+
+              {searchOpen ? (
+                <div className="ws-search-panel" id="ws-search-results">
+                  <p className="ws-search-label">
+                    {normalized ? "Results" : "Jump to"}
+                  </p>
+                  {results.length > 0 ? (
+                    results.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="ws-search-item"
+                          onClick={() => {
+                            setQuery("");
+                            setSearchOpen(false);
+                          }}
+                        >
+                          <span className="ws-search-item-icon">
+                            <Icon size={16} />
+                          </span>
+                          <span>
+                            <strong>{item.label}</strong>
+                            <small>{item.description}</small>
+                          </span>
+                        </Link>
+                      );
+                    })
+                  ) : (
+                    <p className="ws-search-empty">
+                      No page matches “{query.trim()}”.
+                    </p>
+                  )}
+                </div>
+              ) : null}
+            </div>
+
+            <Link href="/dashboard/predict" className="ws-new">
+              <PlusIcon size={15} />
+              <span>New prediction</span>
+            </Link>
+
+            <Link
+              href="/dashboard/profile"
+              className="ws-avatar"
+              aria-label={`Open ${session.name}'s profile`}
+              title={session.name}
+            >
+              {avatar}
+            </Link>
+
+            <button
+              type="button"
+              className="ws-menu-btn"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Open navigation"
+            >
+              <MenuIcon size={18} />
+            </button>
+          </div>
+        </header>
+
+        <main className="ws-main">
+          <div className="ws-content">{children}</div>
+        </main>
+      </div>
+
+      {menuOpen ? (
+        <button
+          type="button"
+          className="ws-scrim"
+          onClick={() => setMenuOpen(false)}
+          aria-label="Close navigation"
+        />
+      ) : null}
+
+      <aside
+        className={`ws-drawer${menuOpen ? " is-open" : ""}`}
+        aria-label="Dashboard navigation"
+        aria-hidden={menuOpen ? undefined : true}
+        inert={menuOpen ? undefined : true}
+      >
+        <div className="ws-drawer-head">
+          <span className="ws-brand">
+            <span className="ws-brand-mark">
+              <IrisMark size={18} />
+            </span>
+            <span className="ws-brand-text">
+              Iris <span>Classifier</span>
+            </span>
+          </span>
           <button
             type="button"
-            className="dash-close"
-            onClick={() => setOpen(false)}
+            className="ws-drawer-close"
+            onClick={() => setMenuOpen(false)}
             aria-label="Close navigation"
           >
             <CloseIcon size={18} />
           </button>
         </div>
 
-        <nav className="dash-nav" aria-label="Dashboard">
-          <span className="dash-nav-label">Workspace</span>
-          {WORKSPACE_NAV.map(renderItem)}
-          <span className="dash-nav-label">Account</span>
-          {ACCOUNT_NAV.map(renderItem)}
+        <p className="ws-drawer-label">Workspace</p>
+        <nav className="ws-drawer-nav">
+          {NAV.map((item) => {
+            const active = isActive(pathname, item.href, item.exact);
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="ws-drawer-link"
+                data-active={active ? "true" : undefined}
+                aria-current={active ? "page" : undefined}
+              >
+                <span className="ws-drawer-icon">
+                  <Icon size={17} />
+                </span>
+                <span>
+                  <strong>{item.label}</strong>
+                  <small>{item.description}</small>
+                </span>
+                <ChevronDownIcon size={14} className="ws-drawer-chevron" />
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="dash-sidebar-foot">
-          <div className="dash-model-note">
-            <span className="live-dot" aria-hidden="true" />
-            RBF SVC · model v1.0.0
-          </div>
-          <Link href="/dashboard/profile" className="dash-user">
-            <span className="dash-avatar">{avatar}</span>
-            <span className="dash-user-text">
+        <div className="ws-drawer-foot">
+          <div className="ws-drawer-user">
+            <span className="ws-avatar">{avatar}</span>
+            <span>
               <strong>{session.name}</strong>
               <small>{session.email}</small>
             </span>
-          </Link>
-          <button type="button" className="dash-signout" onClick={signOut}>
+          </div>
+          <button type="button" className="ws-drawer-signout" onClick={signOut}>
             <LogoutIcon size={16} />
             Sign out
           </button>
         </div>
       </aside>
-
-      {open ? (
-        <button
-          type="button"
-          className="dash-scrim"
-          onClick={() => setOpen(false)}
-          aria-label="Close navigation"
-        />
-      ) : null}
-
-      <div className="dash-main">
-        <header className="dash-topbar">
-          <div className="dash-topbar-left">
-            <button
-              type="button"
-              className="dash-menu"
-              onClick={() => setOpen(true)}
-              aria-label="Open navigation"
-            >
-              <MenuIcon size={19} />
-            </button>
-            <span className="dash-crumb">
-              <span className="dash-crumb-root">Workspace</span>
-              <span className="dash-crumb-sep" aria-hidden="true">
-                /
-              </span>
-              <strong>{title}</strong>
-            </span>
-          </div>
-          <div className="dash-topbar-right">
-            <span className="dash-date">{today}</span>
-            {pathname === "/dashboard/predict" ? null : (
-              <Link href="/dashboard/predict" className="btn btn-primary btn-sm">
-                New prediction
-                <ArrowRightIcon size={15} />
-              </Link>
-            )}
-            <Link
-              href="/dashboard/profile"
-              className="dash-topbar-avatar"
-              aria-label="Open profile"
-            >
-              {avatar}
-            </Link>
-          </div>
-        </header>
-
-        <div className="dash-content">{children}</div>
-      </div>
     </div>
   );
 }
