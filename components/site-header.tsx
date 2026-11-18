@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { ArrowRightIcon, IrisMark } from "@/components/icons";
+import { ArrowRightIcon } from "@/components/icons";
+import { BrandMark } from "@/components/brand-mark";
 import {
   initials,
   readSession,
@@ -49,7 +50,7 @@ export function SiteHeader() {
       <div className="shell header-inner">
         <Link href="/" className="wordmark" aria-label="Iris Classifier home">
           <span className="wordmark-mark">
-            <IrisMark size={21} />
+            <BrandMark size={30} />
           </span>
           <span className="wordmark-text">
             Iris <span>Classifier</span>

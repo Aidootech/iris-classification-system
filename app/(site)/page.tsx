@@ -4,12 +4,12 @@ import Link from "next/link";
 import {
   ArrowRightIcon,
   DatasetIcon,
-  IrisMark,
   LayersIcon,
   ModelsIcon,
   ShieldIcon,
   TargetIcon,
 } from "@/components/icons";
+import { BrandMark } from "@/components/brand-mark";
 import { Reveal } from "@/components/reveal";
 import { SpeciesShowcase } from "@/components/species-showcase";
 import { decimal } from "@/lib/format";
@@ -263,7 +263,7 @@ export default function HomePage() {
           <Reveal>
             <div className="landing-cta">
               <span className="cta-mark">
-                <IrisMark size={30} />
+                <BrandMark size={40} />
               </span>
               <p className="eyebrow">Your workspace</p>
               <h2>Your specimen, classified in seconds.</h2>

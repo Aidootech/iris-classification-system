@@ -21,24 +21,26 @@ function Icon({ size = 18, children, ...props }: IconProps) {
   );
 }
 
-export function IrisMark({
-  size = 22,
-  ...props
-}: SVGProps<SVGSVGElement> & { size?: number }) {
+export function AlertIcon({ size = 20, ...props }: IconProps) {
   return (
     <svg
       viewBox="0 0 24 24"
       width={size}
       height={size}
-      fill="currentColor"
       aria-hidden="true"
       {...props}
     >
-      <ellipse cx="12" cy="6.6" rx="3" ry="4.7" />
-      <ellipse cx="12" cy="17.4" rx="3" ry="4.7" />
-      <ellipse cx="6.6" cy="12" rx="4.7" ry="3" />
-      <ellipse cx="17.4" cy="12" rx="4.7" ry="3" />
-      <circle cx="12" cy="12" r="1.6" fill="var(--mark-center, #d7e9b8)" />
+      <path
+        d="M12 2.4 22.5 20.4a1.3 1.3 0 0 1-1.1 2H2.6a1.3 1.3 0 0 1-1.1-2Z"
+        fill="currentColor"
+      />
+      <path
+        d="M12 8.4v5.4"
+        stroke="#ffffff"
+        strokeWidth={2.2}
+        strokeLinecap="round"
+      />
+      <circle cx="12" cy="17.4" r="1.25" fill="#ffffff" />
     </svg>
   );
 }

@@ -10,7 +10,9 @@ import {
   PredictIcon,
   TrashIcon,
 } from "@/components/icons";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { PageHeader } from "@/components/page-header";
+import { Toast, useToast } from "@/components/toast";
 import {
   formatWhen,
   percent,
@@ -38,7 +40,9 @@ function downloadCsv(entries: HistoryEntry[]) {
 
 export function HistoryView() {
   const { entries, ready } = useHistory();
-  const [confirming, setConfirming] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const toast = useToast();
 
   const mean =
     entries.length > 0
@@ -47,13 +51,21 @@ export function HistoryView() {
       : null;
   const distinct = new Set(entries.map((entry) => entry.species)).size;
 
+  async function handleExport() {
+    if (exporting || entries.length === 0) return;
+
+    setExporting(true);
+    // Give the button a visible working state before the file is written.
+    await new Promise((resolve) => setTimeout(resolve, 850));
+    downloadCsv(entries);
+    setExporting(false);
+    toast.show("CSV exported successfully!");
+  }
+
   function handleClear() {
-    if (!confirming) {
-      setConfirming(true);
-      return;
-    }
     clearHistory();
-    setConfirming(false);
+    setConfirmOpen(false);
+    toast.show("Prediction history cleared.");
   }
 
   return (
@@ -66,24 +78,26 @@ export function HistoryView() {
           <>
             <button
               type="button"
-              className="btn btn-ghost btn-sm"
-              onClick={() => downloadCsv(entries)}
-              disabled={entries.length === 0}
+              className="btn btn-success btn-sm"
+              onClick={handleExport}
+              disabled={entries.length === 0 || exporting}
+              aria-busy={exporting}
             >
-              <DownloadIcon size={15} />
-              Export CSV
+              {exporting ? (
+                <span className="btn-spinner" aria-hidden="true" />
+              ) : (
+                <DownloadIcon size={15} />
+              )}
+              {exporting ? "Exporting…" : "Export CSV"}
             </button>
             <button
               type="button"
-              className={`btn btn-sm ${
-                confirming ? "btn-danger" : "btn-ghost"
-              }`}
-              onClick={handleClear}
+              className="btn btn-danger btn-sm"
+              onClick={() => setConfirmOpen(true)}
               disabled={entries.length === 0}
-              onBlur={() => setConfirming(false)}
             >
               <TrashIcon size={15} />
-              {confirming ? "Confirm clear" : "Clear history"}
+              Clear history
             </button>
           </>
         }
@@ -202,6 +216,19 @@ export function HistoryView() {
           </div>
         )}
       </section>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Clear history?"
+        description={`All ${entries.length} stored prediction${
+          entries.length === 1 ? "" : "s"
+        } will be permanently removed from this browser. This cannot be undone.`}
+        confirmLabel="Clear history"
+        onConfirm={handleClear}
+        onCancel={() => setConfirmOpen(false)}
+      />
+
+      <Toast message={toast.message} onDismiss={toast.dismiss} />
     </div>
   );
 }

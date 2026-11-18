@@ -8,11 +8,11 @@ import {
   ArrowRightIcon,
   EyeIcon,
   EyeOffIcon,
-  IrisMark,
   LockIcon,
   MailIcon,
   UserIcon,
 } from "@/components/icons";
+import { BrandMark } from "@/components/brand-mark";
 import {
   createSession,
   nameFromEmail,
@@ -96,7 +96,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
     <div className="auth-card">
       <Link href="/" className="auth-brand" aria-label="Iris Classifier home">
         <span className="auth-brand-mark">
-          <IrisMark size={22} />
+          <BrandMark size={32} />
         </span>
         Iris
       </Link>

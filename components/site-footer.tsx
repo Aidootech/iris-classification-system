@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { IrisMark } from "@/components/icons";
+import { BrandMark } from "@/components/brand-mark";
 
 export function SiteFooter() {
   return (
@@ -8,7 +8,7 @@ export function SiteFooter() {
       <div className="shell footer-top">
         <div className="footer-brand">
           <span className="footer-wordmark">
-            <IrisMark size={20} />
+            <BrandMark size={28} />
             Iris Classifier
           </span>
           <p>

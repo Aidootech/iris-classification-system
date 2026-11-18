@@ -4,17 +4,16 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
+import { BrandMark } from "@/components/brand-mark";
 import {
   ChevronDownIcon,
   CloseIcon,
   DatasetIcon,
   HistoryIcon,
-  IrisMark,
   LogoutIcon,
   MenuIcon,
   ModelsIcon,
   OverviewIcon,
-  PlusIcon,
   PredictIcon,
   ProfileIcon,
   SearchIcon,
@@ -66,15 +65,6 @@ const NAV = [
     icon: ProfileIcon,
   },
 ];
-
-const TITLES: Record<string, string> = {
-  "/dashboard": "Overview",
-  "/dashboard/predict": "Predict",
-  "/dashboard/models": "Models",
-  "/dashboard/dataset": "Dataset",
-  "/dashboard/history": "History",
-  "/dashboard/profile": "Profile",
-};
 
 function isActive(pathname: string, href: string, exact?: boolean) {
   return exact ? pathname === href : pathname.startsWith(href);
@@ -148,7 +138,7 @@ export function DashboardShell({
     return (
       <div className="dash-loading">
         <span className="dash-loading-mark">
-          <IrisMark size={26} />
+          <BrandMark size={34} />
         </span>
         <span>Opening workspace…</span>
       </div>
@@ -174,17 +164,18 @@ export function DashboardShell({
   return (
     <div className="ws">
       <div className="ws-shell">
-        <header className="ws-bar">
+        <aside className="ws-side" aria-label="Dashboard">
           <Link href="/" className="ws-brand" aria-label="Iris Classifier home">
             <span className="ws-brand-mark">
-              <IrisMark size={19} />
+              <BrandMark size={40} />
             </span>
             <span className="ws-brand-text">
               Iris <span>Classifier</span>
             </span>
           </Link>
 
-          <nav className="ws-nav" aria-label="Dashboard">
+          <p className="ws-side-label">Workspace</p>
+          <nav className="ws-nav">
             {NAV.map((item) => {
               const active = isActive(pathname, item.href, item.exact);
               const Icon = item.icon;
@@ -196,14 +187,41 @@ export function DashboardShell({
                   data-active={active ? "true" : undefined}
                   aria-current={active ? "page" : undefined}
                 >
-                  <Icon size={15} />
+                  <Icon size={17} />
                   <span>{item.label}</span>
                 </Link>
               );
             })}
           </nav>
 
-          <div className="ws-tools">
+          <div className="ws-side-foot">
+            <span className="ws-side-user-text">
+              <strong>{session.name}</strong>
+              <small>{session.email}</small>
+            </span>
+            <button
+              type="button"
+              className="ws-side-signout"
+              onClick={signOut}
+              title="Sign out"
+              aria-label="Sign out"
+            >
+              <LogoutIcon size={16} />
+            </button>
+          </div>
+        </aside>
+
+        <div className="ws-body">
+          <header className="ws-bar">
+            <button
+              type="button"
+              className="ws-menu-btn"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Open navigation"
+            >
+              <MenuIcon size={18} />
+            </button>
+
             <div
               className="ws-search"
               ref={searchWrap}
@@ -278,34 +296,22 @@ export function DashboardShell({
               ) : null}
             </div>
 
-            <Link href="/dashboard/predict" className="ws-new">
-              <PlusIcon size={15} />
-              <span>New prediction</span>
-            </Link>
+            <div className="ws-tools">
+              <Link
+                href="/dashboard/profile"
+                className="ws-avatar"
+                aria-label={`Open ${session.name}'s profile`}
+                title={session.name}
+              >
+                {avatar}
+              </Link>
+            </div>
+          </header>
 
-            <Link
-              href="/dashboard/profile"
-              className="ws-avatar"
-              aria-label={`Open ${session.name}'s profile`}
-              title={session.name}
-            >
-              {avatar}
-            </Link>
-
-            <button
-              type="button"
-              className="ws-menu-btn"
-              onClick={() => setMenuOpen(true)}
-              aria-label="Open navigation"
-            >
-              <MenuIcon size={18} />
-            </button>
-          </div>
-        </header>
-
-        <main className="ws-main">
-          <div className="ws-content">{children}</div>
-        </main>
+          <main className="ws-main">
+            <div className="ws-content">{children}</div>
+          </main>
+        </div>
       </div>
 
       {menuOpen ? (
@@ -326,7 +332,7 @@ export function DashboardShell({
         <div className="ws-drawer-head">
           <span className="ws-brand">
             <span className="ws-brand-mark">
-              <IrisMark size={18} />
+              <BrandMark size={30} />
             </span>
             <span className="ws-brand-text">
               Iris <span>Classifier</span>

@@ -12,7 +12,9 @@ import {
   TrashIcon,
   UserIcon,
 } from "@/components/icons";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { PageHeader } from "@/components/page-header";
+import { Toast, useToast } from "@/components/toast";
 import { formatDate, percent, SPECIES_LABELS } from "@/lib/format";
 import {
   clearHistory,
@@ -41,7 +43,9 @@ export function ProfileView() {
   const { entries } = useHistory();
   const [name, setName] = useState("");
   const [saved, setSaved] = useState(false);
-  const [confirming, setConfirming] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     if (session) setName(session.name);
@@ -77,12 +81,20 @@ export function ProfileView() {
   }
 
   function handleClear() {
-    if (!confirming) {
-      setConfirming(true);
-      return;
-    }
     clearHistory();
-    setConfirming(false);
+    setConfirmOpen(false);
+    toast.show("Prediction history cleared.");
+  }
+
+  async function handleExport() {
+    if (exporting || entries.length === 0) return;
+
+    setExporting(true);
+    // Give the action a visible working state before the file is written.
+    await new Promise((resolve) => setTimeout(resolve, 850));
+    downloadCsv(entries);
+    setExporting(false);
+    toast.show("CSV exported successfully!");
   }
 
   return (
@@ -196,34 +208,38 @@ export function ProfileView() {
             <div className="profile-actions">
               <button
                 type="button"
-                className="profile-action"
-                onClick={() => downloadCsv(entries)}
-                disabled={entries.length === 0}
+                className="profile-action is-success"
+                onClick={handleExport}
+                disabled={entries.length === 0 || exporting}
+                aria-busy={exporting}
               >
                 <span className="profile-action-icon">
-                  <DownloadIcon size={17} />
+                  {exporting ? (
+                    <span className="btn-spinner" aria-hidden="true" />
+                  ) : (
+                    <DownloadIcon size={17} />
+                  )}
                 </span>
                 <span>
-                  <strong>Export prediction history</strong>
+                  <strong>
+                    {exporting
+                      ? "Exporting history…"
+                      : "Export prediction history"}
+                  </strong>
                   <small>Download a CSV of every stored classification</small>
                 </span>
               </button>
               <button
                 type="button"
-                className={`profile-action${
-                  confirming ? " is-danger" : ""
-                }`}
-                onClick={handleClear}
-                onBlur={() => setConfirming(false)}
+                className="profile-action is-danger"
+                onClick={() => setConfirmOpen(true)}
                 disabled={entries.length === 0}
               >
                 <span className="profile-action-icon">
                   <TrashIcon size={17} />
                 </span>
                 <span>
-                  <strong>
-                    {confirming ? "Confirm clear history" : "Clear history"}
-                  </strong>
+                  <strong>Clear history</strong>
                   <small>Remove all locally stored predictions</small>
                 </span>
               </button>
@@ -248,6 +264,19 @@ export function ProfileView() {
           </section>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Clear history?"
+        description={`All ${entries.length} stored prediction${
+          entries.length === 1 ? "" : "s"
+        } will be permanently removed from this browser. This cannot be undone.`}
+        confirmLabel="Clear history"
+        onConfirm={handleClear}
+        onCancel={() => setConfirmOpen(false)}
+      />
+
+      <Toast message={toast.message} onDismiss={toast.dismiss} />
     </div>
   );
 }
